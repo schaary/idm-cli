@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+$:.unshift File.expand_path('../../lib',__FILE__)
+
+require 'thor'
+require 'physik'
+
+module IdmCLI
+  class Idm < Thor
+    desc "stat", "Shows some statistical information about the IDM"
+    def stat
+      # implement git fetch here
+    end
+
+    desc "physik SUBCOMMAND ...ARGS", "manage set of tracked repositories"
+    subcommand "physik", Physik
+  end
+end
+
+IdmCLI::Idm.start
