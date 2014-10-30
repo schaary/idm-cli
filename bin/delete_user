@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+$:.unshift File.expand_path('../../lib',__FILE__)
+
+require 'awesome_print'
+require 'dotenv'
+require 'ruby-plsql'
+require 'thor'
+
+require 'guests'
+
+module IdmCLI
+  class DeleteUser < Thor
+    desc "stat", "Shows some statistical information about the IDM"
+    def stat
+      DeleteUser::connect
+
+      puts plsql.accounts.count
+    end
+
+    # desc "employee SUBCOMMAND ...ARGS", "manage set of tracked repositories"
+    # subcommand "employee", Employee
+
+    desc "guests SUBCOMMAND ...ARGS", "manage set of tracked repositories"
+    subcommand "guests", Guests
+
+
+    def self.connect
+      Dotenv.load
+      plsql.connection = OCI8.new \
+        ENV['IDM_USERNAME'],
+        ENV['IDM_PASSWORD'],
+        ENV['IDM_SID']
+    end
+  end
+end
+
+IdmCLI::DeleteUser.start
