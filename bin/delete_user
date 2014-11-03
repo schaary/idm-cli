@@ -12,6 +12,7 @@ require 'guests'
 
 module IdmCLI
   class DeleteUser < Thor
+
     desc "stat", "Shows some statistical information about the IDM"
     def stat
       DeleteUser::connect
@@ -19,12 +20,8 @@ module IdmCLI
       puts plsql.accounts.count
     end
 
-    # desc "employee SUBCOMMAND ...ARGS", "manage set of tracked repositories"
-    # subcommand "employee", Employee
-
     desc "guests SUBCOMMAND ...ARGS", "manage set of tracked repositories"
     subcommand "guests", Guests
-
 
     def self.connect
       Dotenv.load
@@ -32,6 +29,10 @@ module IdmCLI
         ENV['IDM_USERNAME'],
         ENV['IDM_PASSWORD'],
         ENV['IDM_SID']
+    end
+
+    def self.application_root
+      File.expand_path("../../",__FILE__)
     end
   end
 end
