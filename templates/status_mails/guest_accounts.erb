@@ -1,0 +1,11 @@
+Status zum Mailversand der Abschiedsmails an Gast-Accounts
+==========================================================
+
+Gast-Acocunts insgesamt:     guest_accounts_count 
+Gast-Accounts aktiv:         <%= key_data[:alive_count] %> 
+Gast-Accounts in Abwicklung: <%= key_data[:after_hour_count] %>
+Gast-Accounts suspended**:   <%= key_data[:suspended_count] %>
+
+Am heutigen Tag wurden <%= key_data[:number_of_mails] %> Gast-Accounts per Mail angeschrieben 
+und darüber informiert, dass Ihr Account abgelaufen ist und am <%= key_data[:final_date] %> 
+endgültig gelöscht wird. 
