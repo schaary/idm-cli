@@ -3,18 +3,36 @@
 
 $:.unshift File.expand_path('../../lib',__FILE__)
 
+require 'awesome_print'
+require 'dotenv'
+require 'ruby-plsql'
 require 'thor'
+
 require 'physik'
+require 'remove'
 
 module IdmCLI
   class Idm < Thor
     desc "stat", "Shows some statistical information about the IDM"
     def stat
-      # implement git fetch here
+      connect_idm
+
+      puts plsql.accounts.count
     end
 
     desc "physik SUBCOMMAND ...ARGS", "manage set of tracked repositories"
     subcommand "physik", Physik
+
+    desc "remove SUBCOMMAND ...ARGS", "manage set of tracked repositories"
+    subcommand "remove", Remove
+  private
+    def connect_idm
+      Dotenv.load
+      plsql.connection = OCI8.new \
+        ENV['IDM_USERNAME'],
+        ENV['IDM_PASSWORD'],
+        ENV['IDM_SID']
+    end
   end
 end
 
