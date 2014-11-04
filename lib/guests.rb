@@ -23,22 +23,21 @@ module IdmCLI
 
       #open_summary_file
 
-
-      notify_after_hour
+      mail_counter = 0
+      mail_counter += notify_after_hour
 
       key_data = {
         alive_count: plsql.guest_account_pkg.alive_count,
         after_hour_count: plsql.guest_account_pkg.after_hour_count,
         suspended_count: plsql.guest_account_pkg.suspended_count,
-        number_of_mails: 10,
+        number_of_mails: mail_counter,
         final_date: 0
       }
 
       template = "#{DeleteUser::application_root}/templates/status_mails/guest_accounts.erb"
 
-      counter = key_data[:after_hour_count] + key_data[:suspended_count]
       mail = SummaryMailHandler.new
-      mail.subject "Es wurden #{counter} Abschiedsmails an Gast-Accounts verschickt"
+      mail.subject "Es wurden #{mail_counter} Abschiedsmails an Gast-Accounts verschickt"
       mail.to "michael.schaarschmidt@itz.uni-halle.de"
       mail.body \
         key_data: key_data,
@@ -52,6 +51,8 @@ module IdmCLI
 
       records = nil
       plsql.guest_account_pkg.after_hour { |c| records = c.fetch_all }
+
+      mail_counter = 0
 
       records.pop(records.length-1)
       records.map do |record|
@@ -75,6 +76,8 @@ module IdmCLI
           date_container: date_container,
           template: template
 
+        mail_counter = mail_counter + 1
+
         write_log_to_file mail: send_mail, account: account
 
         write_log_to_database(
@@ -90,6 +93,7 @@ module IdmCLI
           send_date: Date.today.strftime("%d.%m.%Y"),
           final_date: date_container.final_date)
       end
+      mail_counter
     end
 
     def open_summary_file
