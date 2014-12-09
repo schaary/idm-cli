@@ -1,4 +1,5 @@
 
+log/*
 templates/abschiedsbriefe
 Gemfile.lock
 .ruby-version
