@@ -23,12 +23,17 @@ class AccountMailHandler
     @mail = Mail.new
     @mail.charset = 'UTF-8'
     @mail.content_transfer_encoding = '8bit'
-    @mail.to = 'michael.schaarschmidt@itz.uni-halle.de'
-    @mail.from = ENV['MAIL_SUBJECT']
+    @mail.from = ENV['MAIL_SENDER']
   end
 
   def subject text
     @mail.subject = text
+  end
+
+
+  def to address
+    puts address
+    @mail.to = address
   end
 
   def body account: nil, date_container: nil, template: nil

@@ -2,7 +2,6 @@
 
 require 'erb'
 require 'mail'
-require 'pry'
 
 class SummaryMailHandler
 
@@ -18,17 +17,23 @@ class SummaryMailHandler
     }
 
     Mail.defaults do
-      delivery_method ENV['MAIL_DELIVERY_METHOD'].to_sym, options
+      #delivery_method ENV['MAIL_DELIVERY_METHOD'].to_sym, options
+      delivery_method :smtp, options
     end
 
     @mail = Mail.new
     @mail.charset = 'UTF-8'
     @mail.content_transfer_encoding = '8bit'
-    @mail.from = ENV['MAIL_SUBJECT']
+    @mail.from = ENV['MAIL_SENDER']
+    @mail.bcc = "michael.schaarschmidt@itz.uni-halle.de"
   end
 
   def to address
     @mail.to = address
+  end
+
+  def attachment path
+    @mail.add_file path
   end
 
   def subject header
@@ -44,6 +49,6 @@ class SummaryMailHandler
 
     @mail.deliver
 
-    puts @mail
+#    puts @mail
   end
 end
