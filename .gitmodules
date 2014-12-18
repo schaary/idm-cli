@@ -1,0 +1,3 @@
+[submodule "templates/abschiedsbriefe"]
+	path = templates/abschiedsbriefe
+	url = git@github.com:uni-halle/abschiedsbriefe.git
